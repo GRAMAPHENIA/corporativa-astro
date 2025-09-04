@@ -14,33 +14,27 @@ const { description, title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es" class="">
+<html lang="es">
   <head>
+    <style is:global>
+      [x-cloak] { display: none !important; }
+      @font-face {
+        font-family: 'Asimovian';
+        src: url('/fonts/Asimovian/Asimovian-Regular.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{title}</title>
     <ClientRouter />
-    <script>
-      // init theme
-      (function () {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const stored = localStorage.getItem('theme');
-        const isDark = stored ? stored === 'dark' : prefersDark;
-
-        document.documentElement.classList.toggle('dark', isDark);
-      })();
-
-      // global toggle
-      window.toggleTheme = () => {
-        const html = document.documentElement;
-        const isDark = html.classList.toggle('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      };
-    </script>
+  <!-- ...existing code... -->
   </head>
   <body
-    class="bg-primary-50 text-primary-950 antialiased transition dark:bg-primary-950 dark:text-primary-200"
+  class="bg-primary-50 text-primary-950 antialiased transition"
   >
     <Header />
     <main>

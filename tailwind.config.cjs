@@ -3,7 +3,7 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  darkMode: 'class',
+  // darkMode eliminado
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     colors: {
@@ -14,6 +14,7 @@ module.exports = {
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
+      heading: ['Asimovian', 'sans-serif'],
     },
     fontSize: {
       xs: ['0.75rem', '1rem'],

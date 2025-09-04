@@ -2,7 +2,7 @@
 
 declare global {
   interface Window {
-    toggleTheme: () => void;
+  // ...existing code...
   }
 }
 

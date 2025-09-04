@@ -2,39 +2,38 @@
 const questions = [
   {
     id: 'faq-1',
-    title: 'How do I know which pricing plan is right for me?',
+    title: '¿Qué incluye cada plan?',
     answer:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+      'Todos los planes ofrecen acceso completo a nuestras herramientas, soporte personalizado y actualizaciones periódicas.',
   },
   {
     id: 'faq-2',
-    title: 'How can I upgrade, downgrade, or cancel my plan?',
+    title: '¿Puedo cambiar de plan?',
     answer:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+      'Sí, puedes modificar tu plan en cualquier momento según las necesidades de tu empresa.',
   },
   {
     id: 'faq-3',
-    title: "What does 'lifetime access' mean exactly?",
+    title: '¿Ofrecen soporte técnico?',
     answer:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+      'Nuestro equipo está disponible para ayudarte y resolver cualquier consulta técnica o funcional.',
   },
   {
     id: 'faq-4',
-    title: "What does 'free updates' mean exactly?",
-    answer:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+    title: '¿Cómo se realiza el pago?',
+    answer: 'Puedes abonar mediante transferencia bancaria, tarjeta de crédito o débito.',
   },
   {
     id: 'faq-5',
-    title: 'Do you offer a free trial?',
+    title: '¿Hay descuentos por volumen?',
     answer:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+      'Sí, ofrecemos precios especiales para empresas que contraten múltiples servicios o licencias.',
   },
   {
     id: 'faq-6',
-    title: 'How can I request support?',
+    title: '¿Cómo solicito soporte?',
     answer:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+      'Puedes contactarnos por correo electrónico o a través de nuestro formulario de contacto.',
   },
 ];
 ---
@@ -43,39 +42,52 @@ const questions = [
   <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
     <div class="grid gap-12 lg:grid-cols-3 lg:gap-8">
       <div>
-        <h2 class="text-3xl font-medium tracking-tight sm:text-4xl">Frequently asked questions</h2>
+        <h2 class="font-heading text-3xl font-medium tracking-tight sm:text-4xl">
+          Preguntas frecuentes
+        </h2>
       </div>
       <div class="lg:col-span-2">
-        <dl
-          class="-mt-3"
-          x-data="{ selected: null, toggle(value) { this.selected = this.selected === value ? null : value } }"
-        >
+        <dl class="-mt-3" id="faq-list">
           {
             questions.map((question, index) => (
-              <div
-                class="rounded-3xl px-4 transition"
-                x-data={`{ id: ${index}, get isOpen() { return this.id === this.selected }, get isNextOpen() { return (this.id + 1) === this.selected } }`}
-                x-bind:class="{ 'bg-primary-500/10 dark:bg-primary-400/10': isOpen }"
-              >
-                <dt
-                  class="border-b text-lg transition"
-                  x-cloak
-                  x-bind:class="{ 'border-transparent': isOpen || isNextOpen, 'border-primary-900/10 dark:border-primary-300/10': !(isOpen || isNextOpen) }"
-                >
+              <div class="rounded-3xl px-4 transition" id={`faq-item-${index}`}>
+                <dt class=" text-lg transition">
                   <button
                     type="button"
                     class="group block w-full py-6 text-left transition focus-visible:outline-none"
                     aria-controls={question.id}
-                    x-on:click="toggle(id)"
                     aria-expanded="false"
-                    x-bind:aria-expanded="isOpen.toString()"
+                    onclick={`
+                      var dd = document.getElementById('${question.id}');
+                      var item = document.getElementById('faq-item-${index}');
+                      var chevron = document.getElementById('chevron-${index}');
+                      var expanded = dd.classList.contains('faq-open');
+                      if (!expanded) {
+                        dd.classList.add('faq-open');
+                        dd.style.maxHeight = dd.scrollHeight + 'px';
+                        dd.style.opacity = '1';
+                        item.style.background = '#404040';
+                        chevron.style.transform = 'rotate(180deg)';
+                        chevron.style.transition = 'transform 0.3s ease';
+                        this.setAttribute('aria-expanded', 'true');
+                      } else {
+                        dd.style.maxHeight = '0px';
+                        dd.style.opacity = '0';
+                        setTimeout(function(){ dd.classList.remove('faq-open'); }, 300);
+                        item.style.background = 'transparent';
+                        chevron.style.transform = 'rotate(0deg)';
+                        chevron.style.transition = 'transform 0.3s ease';
+                        this.setAttribute('aria-expanded', 'false');
+                      }
+                    `}
                   >
-                    <div class="group-focus-visible:outline-primary-950 dark:group-focus-visible:outline-primary-200 flex items-center justify-between rounded-3xl group-focus-visible:outline group-focus-visible:outline-2 group-focus-visible:outline-offset-2">
+                    <div class="flex items-center justify-between rounded-3xl group-focus-visible:outline group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-primary-950">
                       <span class="font-medium">{question.title}</span>
                       <span class="ml-6 flex h-7 items-center">
                         <svg
-                          class="text-primary-600 dark:text-primary-400 h-6 w-6 rotate-0 transform transition duration-200 ease-in-out"
-                          x-bind:class="{ '-rotate-180': isOpen, 'rotate-0': !isOpen }"
+                          id={`chevron-${index}`}
+                          class="h-6 w-6 rotate-0 transform text-primary-600"
+                          style="transform: rotate(0deg); transition: transform 0.3s ease;"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -87,10 +99,12 @@ const questions = [
                     </div>
                   </button>
                 </dt>
-                <dd class="pb-6 pr-6" id={question.id} x-show="isOpen" x-cloak x-collapse>
-                  <p class="text-primary-950/70 dark:text-primary-200/70 text-base">
-                    {question.answer}
-                  </p>
+                <dd
+                  class="faq-dd pb-6 pr-6"
+                  id={question.id}
+                  style="max-height:0; opacity:0; overflow:hidden; transition:max-height 0.3s ease, opacity 0.3s ease;"
+                >
+                  <p class="text-base text-primary-950/70">{question.answer}</p>
                 </dd>
               </div>
             ))
